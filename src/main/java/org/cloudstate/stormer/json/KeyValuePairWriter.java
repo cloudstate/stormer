@@ -1,10 +1,10 @@
 /**
  */
-package org.cloudstate.rest.json;
+package org.cloudstate.stormer.json;
 
-import static org.cloudstate.rest.json.JsonApiConstants.CIT;
-import static org.cloudstate.rest.json.JsonApiConstants.CIT_COLON;
-import static org.cloudstate.rest.json.JsonApiConstants.CIT_COLON_CIT;
+import static org.cloudstate.stormer.json.JsonApiConstants.CIT;
+import static org.cloudstate.stormer.json.JsonApiConstants.CIT_COLON;
+import static org.cloudstate.stormer.json.JsonApiConstants.CIT_COLON_CIT;
 
 import io.netty.buffer.ByteBuf;
 

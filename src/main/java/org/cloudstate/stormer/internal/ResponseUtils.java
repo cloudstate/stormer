@@ -1,6 +1,6 @@
 /**
  */
-package org.cloudstate.rest.internal;
+package org.cloudstate.stormer.internal;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;

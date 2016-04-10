@@ -1,6 +1,6 @@
 /**
  */
-package org.cloudstate.rest.threads;
+package org.cloudstate.stormer.threads;
 
 import static org.slf4j.LoggerFactory.getLogger;
 

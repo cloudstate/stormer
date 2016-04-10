@@ -1,6 +1,6 @@
 /**
  */
-package org.cloudstate.rest;
+package org.cloudstate.stormer;
 
 import java.util.Optional;
 

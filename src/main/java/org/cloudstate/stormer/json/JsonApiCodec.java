@@ -1,15 +1,15 @@
 /**
  */
-package org.cloudstate.rest.json;
+package org.cloudstate.stormer.json;
 
 import static io.advantageous.boon.json.JsonFactory.create;
-import static org.cloudstate.rest.json.JsonApiConstants.UTF_8;
-import static org.cloudstate.rest.json.JsonApiWriter.nullEntity;
+import static org.cloudstate.stormer.json.JsonApiConstants.UTF_8;
+import static org.cloudstate.stormer.json.JsonApiWriter.nullEntity;
 
 import java.util.Iterator;
 import java.util.Optional;
 
-import org.cloudstate.rest.Codec;
+import org.cloudstate.stormer.Codec;
 
 import io.advantageous.boon.json.JsonParserAndMapper;
 import io.netty.buffer.ByteBuf;

@@ -1,9 +1,9 @@
 /**
  */
-package org.cloudstate.rest;
+package org.cloudstate.stormer;
 
 import static java.nio.charset.Charset.forName;
-import static org.cloudstate.rest.threads.NamedThreadFactory.threadFactory;
+import static org.cloudstate.stormer.threads.NamedThreadFactory.threadFactory;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.net.InetSocketAddress;
@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.concurrent.ThreadFactory;
 import java.util.function.Predicate;
 
-import org.cloudstate.rest.internal.ResourceHandler;
-import org.cloudstate.rest.internal.RestServerHandler;
+import org.cloudstate.stormer.internal.ResourceHandler;
+import org.cloudstate.stormer.internal.RestServerHandler;
 import org.slf4j.Logger;
 
 import io.netty.bootstrap.ServerBootstrap;

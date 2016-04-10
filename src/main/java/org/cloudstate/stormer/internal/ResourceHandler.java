@@ -1,17 +1,17 @@
 /**
  */
-package org.cloudstate.rest.internal;
+package org.cloudstate.stormer.internal;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static java.util.Optional.of;
-import static org.cloudstate.rest.internal.ResponseUtils.badRequest;
-import static org.cloudstate.rest.internal.ResponseUtils.notFound;
+import static org.cloudstate.stormer.internal.ResponseUtils.badRequest;
+import static org.cloudstate.stormer.internal.ResponseUtils.notFound;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.cloudstate.rest.Codec;
-import org.cloudstate.rest.Repository;
+import org.cloudstate.stormer.Codec;
+import org.cloudstate.stormer.Repository;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.HttpResponseStatus;

@@ -1,6 +1,6 @@
 /**
  */
-package org.cloudstate.rest.json;
+package org.cloudstate.stormer.json;
 
 /**
  */

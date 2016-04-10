@@ -1,6 +1,6 @@
 /**
  */
-package org.cloudstate.rest.internal;
+package org.cloudstate.stormer.internal;
 
 import static io.netty.channel.ChannelFutureListener.CLOSE;
 import static io.netty.handler.codec.http.HttpHeaders.Names.CONNECTION;
@@ -17,7 +17,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 import java.nio.charset.Charset;
 import java.util.List;
 
-import org.cloudstate.rest.json.StringConverter;
+import org.cloudstate.stormer.json.StringConverter;
 import org.slf4j.Logger;
 
 import io.netty.buffer.ByteBuf;

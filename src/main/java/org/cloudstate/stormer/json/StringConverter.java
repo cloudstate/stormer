@@ -1,8 +1,8 @@
 /**
  */
-package org.cloudstate.rest.json;
+package org.cloudstate.stormer.json;
 
-import static org.cloudstate.rest.json.JsonApiConstants.UTF_8;
+import static org.cloudstate.stormer.json.JsonApiConstants.UTF_8;
 
 /**
  */
