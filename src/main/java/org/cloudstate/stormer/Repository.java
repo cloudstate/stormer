@@ -7,7 +7,7 @@ import java.util.Optional;
 
 /**
  */
-public interface Repository<T> {
+public interface Repository<T extends Entity> {
 
 	T store(T entity);
 

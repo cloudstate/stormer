@@ -4,7 +4,7 @@ package org.cloudstate.stormer.json;
 
 /**
  */
-public class Attributes extends AbstractJsonApi implements KeyValuePairWriter {
+public class Attributes extends AbstractJsonApi {
 
 	protected final JsonApiWriter api;
 

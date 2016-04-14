@@ -2,6 +2,8 @@
  */
 package org.cloudstate.stormer.json;
 
+import org.cloudstate.stormer.Entity;
+
 import io.netty.buffer.ByteBuf;
 
 /**
@@ -16,31 +18,60 @@ public final class JsonApiWriter2 {
 		return new Writer(byteBuf);
 	}
 
-	public static interface TypeWriter {
+	public static interface TypeWriter extends EndWriter {
 		IdWriter type(String type);
 	}
 
 	public static interface IdWriter {
-		AttributesWriter id(String id);
+		AttrsRelsWriter id(String id);
 	}
 
-	public static interface AttributesWriter extends RelationsWriter {
+	public static interface AttrsRelsWriter extends AttributesWriter, RelationsWriter {
+		// Empty
+	}
+
+	public static interface AttributesWriter extends EndWriter {
 		AttrWriter attributes();
 	}
 
-	public static interface AttrWriter extends RelationsWriter {
-		AttrWriter add(String name, String value);
+	public static interface AttrWriter extends EndAttrWriter {
+		AndAttrWriter add(String name, String value);
+
+		AndAttrWriter add(String name, int value);
 	}
 
-	public static interface RelationsWriter {
+	public static interface AndAttrWriter extends EndAttrWriter {
+		AndAttrWriter andAdd(String name, String value);
+
+		AndAttrWriter andAdd(String name, int value);
+	}
+
+	public static interface EndAttrWriter {
+		RelationsWriter endAttr();
+	}
+
+	public static interface RelationsWriter extends EndWriter {
 		RelWriter relations();
 	}
 
-	public static interface RelWriter {
-		RelWriter add();
+	public static interface RelWriter extends EndRelWriter {
+		<T extends Entity> AndRelWriter add(String name, T entity);
 	}
 
-	private static final class Writer implements TypeWriter, IdWriter, AttributesWriter, AttrWriter, RelWriter, KeyValuePairWriter {
+	public static interface AndRelWriter extends EndRelWriter {
+		<T extends Entity> AndRelWriter andAdd(String name, T entity);
+	}
+
+	public static interface EndRelWriter {
+		EndWriter endRels();
+	}
+
+	public static interface EndWriter {
+		void end();
+	}
+
+	private static final class Writer extends KeyValuePairWriter
+			implements TypeWriter, IdWriter, AttrsRelsWriter, AttrWriter, AndAttrWriter, RelWriter, AndRelWriter {
 
 		private final ByteBuf byteBuf;
 
@@ -56,7 +87,7 @@ public final class JsonApiWriter2 {
 		}
 
 		@Override
-		public AttributesWriter id(final String id) {
+		public AttrsRelsWriter id(final String id) {
 			byteBuf.writeByte(',');
 			write("id", id, byteBuf);
 			return this;
@@ -64,22 +95,67 @@ public final class JsonApiWriter2 {
 
 		@Override
 		public AttrWriter attributes() {
+			writeValue(",\"attributes\":{", byteBuf);
 			return this;
 		}
 
 		@Override
-		public AttrWriter add(final String name, final String value) {
+		public AndAttrWriter add(final String name, final String value) {
+			write(name, value, byteBuf);
 			return this;
 		}
 
 		@Override
-		public RelWriter add() {
+		public AndAttrWriter add(final String name, final int value) {
+			write(name, value, byteBuf);
+			return this;
+		}
+
+		@Override
+		public AndAttrWriter andAdd(final String name, final String value) {
+			byteBuf.writeByte(',');
+			write(name, value, byteBuf);
+			return this;
+		}
+
+		@Override
+		public AndAttrWriter andAdd(final String name, final int value) {
+			byteBuf.writeByte(',');
+			write(name, value, byteBuf);
+			return this;
+		}
+
+		@Override
+		public RelationsWriter endAttr() {
+			byteBuf.writeByte('}');
 			return this;
 		}
 
 		@Override
 		public RelWriter relations() {
-			return null;
+			writeValue(",\"relationships\":{", byteBuf);
+			return this;
+		}
+
+		@Override
+		public <T extends Entity> AndRelWriter add(final String name, final T entity) {
+			return this;
+		}
+
+		@Override
+		public <T extends Entity> AndRelWriter andAdd(final String name, final T entity) {
+			return this;
+		}
+
+		@Override
+		public EndWriter endRels() {
+			byteBuf.writeByte('}');
+			return this;
+		}
+
+		@Override
+		public void end() {
+			byteBuf.writeByte('}');
 		}
 
 	}

@@ -17,7 +17,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 import java.nio.charset.Charset;
 import java.util.List;
 
-import org.cloudstate.stormer.json.StringConverter;
 import org.slf4j.Logger;
 
 import io.netty.buffer.ByteBuf;
@@ -37,7 +36,7 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 /**
  */
 @Sharable
-public final class RestServerHandler extends SimpleChannelInboundHandler<Object>implements StringConverter {
+public final class RestServerHandler extends SimpleChannelInboundHandler<Object> {
 
 	private static final Logger LOG = getLogger(RestServerHandler.class);
 

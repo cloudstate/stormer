@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf;
 
 /**
  */
-public final class JsonApiWriter extends AbstractJsonApi implements KeyValuePairWriter {
+public final class JsonApiWriter extends AbstractJsonApi {
 
 	private static final byte[] SINGLE_PREFIX = "{\"data\":".getBytes(UTF_8);
 	private static final byte[] MULTI_PREFIX = "{\"data\":[".getBytes(UTF_8);

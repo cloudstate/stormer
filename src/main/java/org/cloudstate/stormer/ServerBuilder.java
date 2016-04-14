@@ -63,7 +63,7 @@ public final class ServerBuilder {
 	}
 
 	public static interface ResourceBuilder {
-		<T> ResourceBuilder resource(String name, Repository<T> repository, Codec<T> codec);
+		<T extends Entity> ResourceBuilder resource(String name, Repository<T> repository, Codec<T> codec);
 
 		Future<Void> start() throws Exception;
 	}
@@ -140,7 +140,7 @@ public final class ServerBuilder {
 		}
 
 		@Override
-		public <T> ResourceBuilder resource(final String name, final Repository<T> repository, final Codec<T> codec) {
+		public <T extends Entity> ResourceBuilder resource(final String name, final Repository<T> repository, final Codec<T> codec) {
 			final String resourceName = baseUrl.endsWith(SLASH) ? baseUrl + name : baseUrl + slash(name);
 			LOG.info("-- resource() registering resource {}", resourceName);
 

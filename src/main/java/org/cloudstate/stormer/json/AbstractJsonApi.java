@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 
 /**
  */
-public abstract class AbstractJsonApi {
+public abstract class AbstractJsonApi extends KeyValuePairWriter {
 
 	protected static final Charset UTF_8 = forName("UTF-8");
 

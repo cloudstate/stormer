@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.cloudstate.stormer.Codec;
+import org.cloudstate.stormer.Entity;
 import org.cloudstate.stormer.Repository;
 
 import io.netty.buffer.ByteBuf;
@@ -18,7 +19,7 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 
 /**
  */
-public class ResourceHandler<T> {
+public class ResourceHandler<T extends Entity> {
 
 	private final String resource;
 	private final int resourceLength;
@@ -34,7 +35,7 @@ public class ResourceHandler<T> {
 		this.codec = codec;
 	}
 
-	public static <T> ResourceHandler<T> create(final String url, final Repository<T> repository, final Codec<T> codec) {
+	public static <T extends Entity> ResourceHandler<T> create(final String url, final Repository<T> repository, final Codec<T> codec) {
 		return new ResourceHandler<>(url, repository, codec);
 	}
 
