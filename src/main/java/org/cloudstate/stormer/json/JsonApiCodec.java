@@ -4,19 +4,19 @@ package org.cloudstate.stormer.json;
 
 import static io.advantageous.boon.json.JsonFactory.create;
 import static org.cloudstate.stormer.json.JsonApiConstants.UTF_8;
-import static org.cloudstate.stormer.json.JsonApiWriter.nullEntity;
 
 import java.util.Iterator;
 import java.util.Optional;
 
 import org.cloudstate.stormer.Codec;
+import org.cloudstate.stormer.Entity;
 
 import io.advantageous.boon.json.JsonParserAndMapper;
 import io.netty.buffer.ByteBuf;
 
 /**
  */
-public abstract class JsonApiCodec<T extends JsonApiEntity> implements Codec<T> {
+public abstract class JsonApiCodec<T extends Entity> implements Codec<T> {
 
 	private static final JsonParserAndMapper mapper = create().parser();
 
@@ -32,37 +32,37 @@ public abstract class JsonApiCodec<T extends JsonApiEntity> implements Codec<T> 
 		if (entity.isPresent()) {
 			final T e = entity.get();
 
-			JsonApiWriter.singlePrefix(byteBuf);
-			encode(e, new JsonApiWriter(byteBuf));
+			KeyValuePairWriter.singlePrefix(byteBuf);
+			encode(e, JsonApiWriter.jsonApi(byteBuf));
 
-			JsonApiWriter.links(byteBuf);
-			JsonApiWriter.self(address, e, byteBuf);
-			JsonApiWriter.linksEnd(byteBuf);
+			KeyValuePairWriter.links(byteBuf);
+			KeyValuePairWriter.self(address, e, byteBuf);
+			KeyValuePairWriter.linksEnd(byteBuf);
 
-			JsonApiWriter.singleIncludes(byteBuf);
-			JsonApiWriter.postfix(byteBuf);
+			KeyValuePairWriter.singleIncludes(byteBuf);
+			KeyValuePairWriter.postfix(byteBuf);
 		} else {
-			nullEntity(byteBuf);
+			KeyValuePairWriter.nullEntity(byteBuf);
 		}
 	}
 
 	@Override
 	public final void encode(final Iterable<T> entities, final ByteBuf byteBuf) {
-		JsonApiWriter.multiPrefix(byteBuf);
+		KeyValuePairWriter.multiPrefix(byteBuf);
 
 		final Iterator<T> it = entities.iterator();
 
 		if (it.hasNext()) {
-			encode(it.next(), new JsonApiWriter(byteBuf));
+			encode(it.next(), JsonApiWriter.jsonApi(byteBuf));
 		}
 
 		while (it.hasNext()) {
 			byteBuf.writeByte(',');
-			encode(it.next(), new JsonApiWriter(byteBuf));
+			encode(it.next(), JsonApiWriter.jsonApi(byteBuf));
 		}
 
-		JsonApiWriter.multiIncludes(byteBuf);
-		JsonApiWriter.postfix(byteBuf);
+		KeyValuePairWriter.multiIncludes(byteBuf);
+		KeyValuePairWriter.postfix(byteBuf);
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public abstract class JsonApiCodec<T extends JsonApiEntity> implements Codec<T> 
 		return decode(new JsonApiReader(mapper.parseMap(bytes, UTF_8)));
 	}
 
-	public abstract void encode(final T entity, final JsonApiWriter json);
+	public abstract void encode(final T entity, final JsonApiWriter.TypeWriter json);
 
 	public abstract T decode(JsonApiReader json);
 

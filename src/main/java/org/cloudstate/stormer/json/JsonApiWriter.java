@@ -2,92 +2,177 @@
  */
 package org.cloudstate.stormer.json;
 
+import static org.cloudstate.stormer.json.KeyValuePairWriter.write;
+import static org.cloudstate.stormer.json.KeyValuePairWriter.writeValue;
+
+import org.cloudstate.stormer.Entity;
+
 import io.netty.buffer.ByteBuf;
 
 /**
  */
-public final class JsonApiWriter extends AbstractJsonApi {
+public final class JsonApiWriter {
 
-	private static final byte[] SINGLE_PREFIX = "{\"data\":".getBytes(UTF_8);
-	private static final byte[] MULTI_PREFIX = "{\"data\":[".getBytes(UTF_8);
-
-	private static final byte[] LINKS_PREFIX = ",\"links\":{".getBytes(UTF_8);
-	private static final byte[] SELF = "\"self\":\"".getBytes(UTF_8);
-
-	private static final byte[] SINGLE_INCLUDES = ",\"includes\":[".getBytes(UTF_8);
-	private static final byte[] MULTI_INCLUDES = "],\"includes\":[".getBytes(UTF_8);
-	private static final byte[] POSTFIX = "]}".getBytes(UTF_8);
-	private static final byte[] NULL_ENTITY = "{\"data\":null,\"included\":[]}".getBytes(UTF_8);
-
-	private static final byte[] ATTRIBUTES = ",\"attributes\":".getBytes(UTF_8);
-
-	public static void nullEntity(final ByteBuf byteBuf) {
-		byteBuf.writeBytes(NULL_ENTITY);
+	private JsonApiWriter() {
+		throw new UnsupportedOperationException();
 	}
 
-	public static void singlePrefix(final ByteBuf byteBuf) {
-		byteBuf.writeBytes(SINGLE_PREFIX);
+	public static TypeWriter jsonApi(final ByteBuf byteBuf) {
+		return new Writer(byteBuf);
 	}
 
-	public static void multiPrefix(final ByteBuf byteBuf) {
-		byteBuf.writeBytes(MULTI_PREFIX);
+	public static interface TypeWriter extends EndWriter {
+		IdWriter type(String type);
 	}
 
-	public static void links(final ByteBuf byteBuf) {
-		byteBuf.writeBytes(LINKS_PREFIX);
+	public static interface IdWriter {
+		AttrsRelsWriter id(String id);
 	}
 
-	public static <T extends JsonApiEntity> void self(final byte[] address, final T entity, final ByteBuf byteBuf) {
-		byteBuf.writeBytes(SELF);
-		byteBuf.writeBytes(address);
-		byteBuf.writeByte('/');
-		byteBuf.writeBytes(entity.getType().getBytes(UTF_8));
-		byteBuf.writeByte('/');
-		byteBuf.writeBytes(entity.getId().getBytes(UTF_8));
-		byteBuf.writeByte('\"');
+	public static interface AttrsRelsWriter extends AttributesWriter, RelationsWriter {
+		// Empty
 	}
 
-	public static void linksEnd(final ByteBuf byteBuf) {
-		byteBuf.writeByte('}');
+	public static interface AttributesWriter extends EndWriter {
+		AttrWriter attributes();
 	}
 
-	public static void singleIncludes(final ByteBuf byteBuf) {
-		byteBuf.writeBytes(SINGLE_INCLUDES);
+	public static interface AttrWriter extends EndAttrWriter {
+		AndAttrWriter add(String name, String value);
+
+		AndAttrWriter add(String name, int value);
 	}
 
-	public static void multiIncludes(final ByteBuf byteBuf) {
-		byteBuf.writeBytes(MULTI_INCLUDES);
+	public static interface AndAttrWriter extends EndAttrWriter {
+		AndAttrWriter andAdd(String name, String value);
+
+		AndAttrWriter andAdd(String name, int value);
 	}
 
-	public static void postfix(final ByteBuf byteBuf) {
-		byteBuf.writeBytes(POSTFIX);
+	public static interface EndAttrWriter {
+		RelationsWriter endAttr();
 	}
 
-	public JsonApiWriter(final ByteBuf byteBuf) {
-		super(byteBuf);
-		byteBuf.writeByte('{');
+	public static interface RelationsWriter extends EndWriter {
+		RelWriter relations();
 	}
 
-	public JsonApiWriter type(final String type) {
-		write("type", type, byteBuf);
-		return this;
+	public static interface RelWriter extends EndRelWriter {
+		<T extends Entity> AndRelWriter add(String name, T entity);
 	}
 
-	public JsonApiWriter id(final String id) {
-		byteBuf.writeByte(',');
-		write("id", id, byteBuf);
-		return this;
+	public static interface AndRelWriter extends EndRelWriter {
+		<T extends Entity> AndRelWriter andAdd(String name, T entity);
 	}
 
-	public Attributes attributes() {
-		byteBuf.writeBytes(ATTRIBUTES);
-		return new Attributes(this);
+	public static interface EndRelWriter {
+		EndWriter endRels();
 	}
 
-	@Override
-	public JsonApiWriter end() {
-		byteBuf.writeByte('}');
-		return this;
+	public static interface EndWriter {
+		void end();
+	}
+
+	private static final class Writer implements TypeWriter, IdWriter, AttrsRelsWriter, AttrWriter, AndAttrWriter, RelWriter, AndRelWriter {
+
+		private final ByteBuf byteBuf;
+
+		protected Writer(final ByteBuf byteBuf) {
+			this.byteBuf = byteBuf;
+			byteBuf.writeByte('{');
+		}
+
+		@Override
+		public IdWriter type(final String type) {
+			write("type", type, byteBuf);
+			return this;
+		}
+
+		@Override
+		public AttrsRelsWriter id(final String id) {
+			byteBuf.writeByte(',');
+			write("id", id, byteBuf);
+			return this;
+		}
+
+		@Override
+		public AttrWriter attributes() {
+			writeValue(",\"attributes\":{", byteBuf);
+			return this;
+		}
+
+		@Override
+		public AndAttrWriter add(final String name, final String value) {
+			write(name, value, byteBuf);
+			return this;
+		}
+
+		@Override
+		public AndAttrWriter add(final String name, final int value) {
+			write(name, value, byteBuf);
+			return this;
+		}
+
+		@Override
+		public AndAttrWriter andAdd(final String name, final String value) {
+			byteBuf.writeByte(',');
+			write(name, value, byteBuf);
+			return this;
+		}
+
+		@Override
+		public AndAttrWriter andAdd(final String name, final int value) {
+			byteBuf.writeByte(',');
+			write(name, value, byteBuf);
+			return this;
+		}
+
+		@Override
+		public RelationsWriter endAttr() {
+			byteBuf.writeByte('}');
+			return this;
+		}
+
+		@Override
+		public RelWriter relations() {
+			writeValue(",\"relationships\":{", byteBuf);
+			return this;
+		}
+
+		@Override
+		public <T extends Entity> AndRelWriter add(final String name, final T entity) {
+			write(name, byteBuf);
+			writeValue("{\"data\":{", byteBuf);
+			write("type", entity.getType(), byteBuf);
+			byteBuf.writeByte(',');
+			write("id", entity.getId(), byteBuf);
+			writeValue("}}", byteBuf);
+			return this;
+		}
+
+		@Override
+		public <T extends Entity> AndRelWriter andAdd(final String name, final T entity) {
+			byteBuf.writeByte(',');
+			write(name, byteBuf);
+			writeValue("{\"data\":{", byteBuf);
+			write("type", entity.getType(), byteBuf);
+			byteBuf.writeByte(',');
+			write("id", entity.getId(), byteBuf);
+			writeValue("}}", byteBuf);
+			return this;
+		}
+
+		@Override
+		public EndWriter endRels() {
+			byteBuf.writeByte('}');
+			return this;
+		}
+
+		@Override
+		public void end() {
+			byteBuf.writeByte('}');
+		}
+
 	}
 
 }

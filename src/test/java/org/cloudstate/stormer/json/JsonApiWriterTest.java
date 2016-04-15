@@ -2,7 +2,7 @@ package org.cloudstate.stormer.json;
 
 import static java.nio.charset.Charset.forName;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.cloudstate.stormer.json.JsonApiWriter2.jsonApi;
+import static org.cloudstate.stormer.json.JsonApiWriter.jsonApi;
 
 import java.nio.charset.Charset;
 
@@ -13,7 +13,7 @@ import org.junit.Test;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
-public class JsonApiWriter2Test {
+public class JsonApiWriterTest {
 
 	private static final Charset UTF_8 = forName("UTF-8");
 
@@ -75,7 +75,7 @@ public class JsonApiWriter2Test {
 	@Test
 	public void relation() {
 		jsonApi(byteBuf).type("t").id("i")
-				.relations().add("father", new Person()).endRels()
+				.relations().add("father", new Person(13)).endRels()
 				.end();
 
 		assertThat(byteBuf.toString(UTF_8))
@@ -85,16 +85,20 @@ public class JsonApiWriter2Test {
 	@Test
 	public void relations() {
 		jsonApi(byteBuf).type("t").id("i")
-				.relations().add("father", new Person()).andAdd("mother", new Person()).endRels()
+				.relations().add("father", new Person(13)).andAdd("mother", new Person(11)).endRels()
 				.end();
 
-		assertThat(byteBuf.toString(UTF_8)).isEqualTo("{'type':'t','id':'i','relationships':{}}".replace("'", "\""));
+		assertThat(byteBuf.toString(UTF_8)).isEqualTo(
+				"{'type':'t','id':'i','relationships':{'father':{'data':{'type':'person','id':'13'}},'mother':{'data':{'type':'person','id':'11'}}}}"
+						.replace("'", "\""));
 	}
 
 	private static final class Person implements Entity {
 
-		protected Person() {
-			// Empty
+		private final String id;
+
+		protected Person(final int id) {
+			this.id = Integer.toString(id);
 		}
 
 		@Override
@@ -104,7 +108,7 @@ public class JsonApiWriter2Test {
 
 		@Override
 		public String getId() {
-			return "13";
+			return id;
 		}
 
 	}
