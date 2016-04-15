@@ -4,6 +4,7 @@ import java.util.Map;
 
 public final class JsonApiReader {
 
+	@SuppressWarnings("unused")
 	private final Map<String, Object> json;
 	private final Map<String, Object> data;
 	private final Map<String, Object> attributes;

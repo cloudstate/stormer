@@ -15,18 +15,19 @@ import io.netty.buffer.ByteBuf;
  */
 final class WriterUtil {
 
-	private static final byte[] SINGLE_PREFIX = "{\"data\":".getBytes(UTF_8);
-	private static final byte[] MULTI_PREFIX = "{\"data\":[".getBytes(UTF_8);
+	private static final byte[] SINGLE_PREFIX = toBytes("{\"data\":");
+	private static final byte[] MULTI_PREFIX = toBytes("{\"data\":[");
 
-	private static final byte[] LINKS_PREFIX = ",\"links\":{".getBytes(UTF_8);
-	private static final byte[] SELF = "\"self\":\"".getBytes(UTF_8);
+	private static final byte[] LINKS_PREFIX = toBytes(",\"links\":{");
+	private static final byte[] SELF = toBytes("\"self\":\"");
 
-	private static final byte[] SINGLE_INCLUDES = ",\"includes\":[".getBytes(UTF_8);
-	private static final byte[] MULTI_INCLUDES = "],\"includes\":[".getBytes(UTF_8);
-	private static final byte[] POSTFIX = "]}".getBytes(UTF_8);
-	private static final byte[] NULL_ENTITY = "{\"data\":null,\"included\":[]}".getBytes(UTF_8);
+	private static final byte[] SINGLE_INCLUDES = toBytes(",\"includes\":[");
+	private static final byte[] MULTI_INCLUDES = toBytes("],\"includes\":[");
+	private static final byte[] POSTFIX = toBytes("]}");
+	private static final byte[] NULL_ENTITY = toBytes("{\"data\":null,\"included\":[]}");
 
-	private static final byte[] ATTRIBUTES = ",\"attributes\":".getBytes(UTF_8);
+	@SuppressWarnings("unused")
+	private static final byte[] ATTRIBUTES = toBytes(",\"attributes\":");
 
 	private WriterUtil() {
 		throw new UnsupportedOperationException();
