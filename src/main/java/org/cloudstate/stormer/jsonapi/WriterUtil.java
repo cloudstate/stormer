@@ -13,7 +13,7 @@ import io.netty.buffer.ByteBuf;
 
 /**
  */
-final class KeyValuePairWriter {
+final class WriterUtil {
 
 	private static final byte[] SINGLE_PREFIX = "{\"data\":".getBytes(UTF_8);
 	private static final byte[] MULTI_PREFIX = "{\"data\":[".getBytes(UTF_8);
@@ -28,7 +28,7 @@ final class KeyValuePairWriter {
 
 	private static final byte[] ATTRIBUTES = ",\"attributes\":".getBytes(UTF_8);
 
-	private KeyValuePairWriter() {
+	private WriterUtil() {
 		throw new UnsupportedOperationException();
 	}
 

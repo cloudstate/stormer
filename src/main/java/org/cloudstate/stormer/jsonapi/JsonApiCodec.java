@@ -32,23 +32,23 @@ public abstract class JsonApiCodec<T extends Entity> implements Codec<T> {
 		if (entity.isPresent()) {
 			final T e = entity.get();
 
-			KeyValuePairWriter.singlePrefix(byteBuf);
+			WriterUtil.singlePrefix(byteBuf);
 			encode(e, JsonApiWriter.jsonApi(byteBuf));
 
-			KeyValuePairWriter.links(byteBuf);
-			KeyValuePairWriter.self(address, e, byteBuf);
-			KeyValuePairWriter.linksEnd(byteBuf);
+			WriterUtil.links(byteBuf);
+			WriterUtil.self(address, e, byteBuf);
+			WriterUtil.linksEnd(byteBuf);
 
-			KeyValuePairWriter.singleIncludes(byteBuf);
-			KeyValuePairWriter.postfix(byteBuf);
+			WriterUtil.singleIncludes(byteBuf);
+			WriterUtil.postfix(byteBuf);
 		} else {
-			KeyValuePairWriter.nullEntity(byteBuf);
+			WriterUtil.nullEntity(byteBuf);
 		}
 	}
 
 	@Override
 	public final void encode(final Iterable<T> entities, final ByteBuf byteBuf) {
-		KeyValuePairWriter.multiPrefix(byteBuf);
+		WriterUtil.multiPrefix(byteBuf);
 
 		final Iterator<T> it = entities.iterator();
 
@@ -61,8 +61,8 @@ public abstract class JsonApiCodec<T extends Entity> implements Codec<T> {
 			encode(it.next(), JsonApiWriter.jsonApi(byteBuf));
 		}
 
-		KeyValuePairWriter.multiIncludes(byteBuf);
-		KeyValuePairWriter.postfix(byteBuf);
+		WriterUtil.multiIncludes(byteBuf);
+		WriterUtil.postfix(byteBuf);
 	}
 
 	@Override
