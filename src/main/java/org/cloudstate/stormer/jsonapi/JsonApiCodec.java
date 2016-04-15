@@ -1,9 +1,9 @@
 /**
  */
-package org.cloudstate.stormer.json;
+package org.cloudstate.stormer.jsonapi;
 
 import static io.advantageous.boon.json.JsonFactory.create;
-import static org.cloudstate.stormer.json.JsonApiConstants.UTF_8;
+import static org.cloudstate.stormer.jsonapi.JsonApiConstants.UTF_8;
 
 import java.util.Iterator;
 import java.util.Optional;

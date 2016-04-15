@@ -1,6 +1,6 @@
 /**
  */
-package org.cloudstate.stormer.json;
+package org.cloudstate.stormer.jsonapi;
 
 import static java.nio.charset.Charset.forName;
 

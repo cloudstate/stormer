@@ -1,11 +1,11 @@
 /**
  */
-package org.cloudstate.stormer.json;
+package org.cloudstate.stormer.jsonapi;
 
-import static org.cloudstate.stormer.json.JsonApiConstants.CIT;
-import static org.cloudstate.stormer.json.JsonApiConstants.CIT_COLON;
-import static org.cloudstate.stormer.json.JsonApiConstants.CIT_COLON_CIT;
-import static org.cloudstate.stormer.json.JsonApiConstants.UTF_8;
+import static org.cloudstate.stormer.jsonapi.JsonApiConstants.CIT;
+import static org.cloudstate.stormer.jsonapi.JsonApiConstants.CIT_COLON;
+import static org.cloudstate.stormer.jsonapi.JsonApiConstants.CIT_COLON_CIT;
+import static org.cloudstate.stormer.jsonapi.JsonApiConstants.UTF_8;
 
 import org.cloudstate.stormer.Entity;
 

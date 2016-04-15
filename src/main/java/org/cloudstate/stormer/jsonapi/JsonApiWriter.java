@@ -1,9 +1,9 @@
 /**
  */
-package org.cloudstate.stormer.json;
+package org.cloudstate.stormer.jsonapi;
 
-import static org.cloudstate.stormer.json.KeyValuePairWriter.write;
-import static org.cloudstate.stormer.json.KeyValuePairWriter.writeValue;
+import static org.cloudstate.stormer.jsonapi.KeyValuePairWriter.write;
+import static org.cloudstate.stormer.jsonapi.KeyValuePairWriter.writeValue;
 
 import org.cloudstate.stormer.Entity;
 

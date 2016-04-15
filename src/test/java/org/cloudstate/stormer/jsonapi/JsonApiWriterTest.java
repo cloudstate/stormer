@@ -1,8 +1,8 @@
-package org.cloudstate.stormer.json;
+package org.cloudstate.stormer.jsonapi;
 
 import static java.nio.charset.Charset.forName;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.cloudstate.stormer.json.JsonApiWriter.jsonApi;
+import static org.cloudstate.stormer.jsonapi.JsonApiWriter.jsonApi;
 
 import java.nio.charset.Charset;
 

@@ -1,4 +1,4 @@
-package org.cloudstate.stormer.json;
+package org.cloudstate.stormer.jsonapi;
 
 import java.util.Map;
 
